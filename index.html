@@ -1,0 +1,156 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  <title>Grid Game</title>
+  
+  <style>
+  .row-buttons {
+    display: grid;
+	float: left;
+	left: 10px;
+	list-style: none;
+	padding: 10px;
+	grid-gap: 10px;
+	margin-top: 20px;
+   }
+   
+   .row-btn {
+      margin-top: 50px;
+	  padding-left: 78px;
+	  text-align: left;
+   }
+  
+  .grid-container {
+	margin-left: 150px;
+    display: grid;
+    grid-template-columns: 100px 100px 100px 100px;
+    padding: 10px;
+	grid-gap: 10px 10px;
+  }
+  
+  .grid-item {
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    font-size: 30px;
+    text-align: center;
+  }
+  
+  .grid-item[innerHTML="-1"] {
+	background-color: red;
+  }
+ 
+  .inline-with {
+	display: inline-block;
+  }
+  </style>
+
+</head>
+
+<body onload="randomizeBoard()">
+
+	
+	<div class="row-buttons">
+		<button type="button" onclick="addToRow('row1')" class="row-btn btn btn-primary">+</button>
+		<button type="button" onclick="addToRow('row2')" class="row-btn btn btn-primary">+</button>
+		<button type="button" onclick="addToRow('row3')" class="row-btn btn btn-primary">+</button>
+	    <button type="button" onclick="addToRow('row4')" class="row-btn btn btn-primary">+</button>
+	</div>
+
+	<div class="grid-container">
+		<button type="button" onclick="addToColumn('col1')" class="btn btn-primary">+</button>
+		<button type="button" onclick="addToColumn('col2')" class="btn btn-primary">+</button>
+		<button type="button" onclick="addToColumn('col3')" class="btn btn-primary">+</button>
+		<button type="button" onclick="addToColumn('col4')" class="btn btn-primary">+</button>
+		<div class="calc row1 col1 grid-item">1</div>
+		<div class="calc row1 col2 grid-item">0</div>
+		<div class="calc row1 col3 grid-item">1</div>
+		<div class="calc row1 col4 grid-item">-1</div>
+		<div class="calc row2 col1 grid-item">0</div>
+		<div class="calc row2 col2 grid-item">1</div>
+		<div class="calc row2 col3 grid-item">-1</div>
+		<div class="calc row2 col4 grid-item">1</div>
+		<div class="calc row3 col1 grid-item">0</div>
+		<div class="calc row3 col2 grid-item">0</div>
+		<div class="calc row3 col3 grid-item">1</div>
+		<div class="calc row3 col4 grid-item">1</div>
+		<div class="calc row4 col1 grid-item">-1</div>
+		<div class="calc row4 col2 grid-item">1</div>
+		<div class="calc row4 col3 grid-item">0</div>
+		<div class="calc row4 col4 grid-item">1</div>
+	</div> 
+	
+
+	
+	<div>
+		<h2 class="inline-with" >Score:&nbsp;</h2><h2 class="inline-with" id="score">0</h2><br><button type="button" onclick="randomizeBoard()" class="btn btn-primary">Reset Board</button>
+		<h2 class="inline-with" >Best score:&nbsp;</h2><h2 class="inline-with" id="best-score">0</h2>
+	</div>
+	
+  <script>
+  function randomizeBoard() {
+	var numbers = [-1, 0, 1]
+	var totalItems = document.getElementsByClassName('calc');
+	for (var i = 0; i < totalItems.length; i++) {
+		totalItems[i].innerHTML = numbers[Math.floor(Math.random() * numbers.length)];
+		var number = totalItems[i].innerHTML;
+		determineBackgroundColour(number, totalItems[i]);
+	}
+	calculateScore();
+  }
+  
+  function determineBackgroundColour(number, item) {
+	if (number == 1) {
+		item.style.backgroundColor = "green";
+	} else if (number == 0) { 
+		item.style.backgroundColor = "white";
+	} else if (number == -1) {
+		item.style.backgroundColor = "red";
+	}
+  }
+  
+  function calculateScore() {
+	var totalItems = document.getElementsByClassName('calc');
+	var result = 0;
+	for (var i = 0; i < totalItems.length; i++) {
+		var number = parseInt(totalItems[i].innerHTML, 10);
+		result = result + number;
+	}
+	var score = document.getElementById('score');
+	var bestScore = document.getElementById('best-score');
+	score.innerHTML = result;
+	if (parseInt(score.innerHTML) > parseInt(bestScore.innerHTML)) {
+		bestScore.innerHTML = score.innerHTML;
+	}
+  }
+  
+  function addToRow(row) {
+	var items = document.getElementsByClassName(row);
+	addToItems(items);
+  }
+  
+  function addToColumn(column) {
+	var items = document.getElementsByClassName(column);
+	addToItems(items);
+  }
+   
+  function addToItems(items) {
+	for (var i = 0; i < items.length; i++) {
+		var number = items[i].innerHTML;
+		if (number == 1) {
+			number = -2;
+		}
+		number++;
+		determineBackgroundColour(number, items[i]);
+		items[i].innerHTML = number;
+	}
+	calculateScore();
+  }
+  </script>
+</body>
+</html>
